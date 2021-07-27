@@ -1,9 +1,9 @@
 package com.eder.crud.controller;
 
-import com.eder.crud.dto.PessoaDTO;
+import com.eder.crud.dto.PessoaFisicaDTO;
 import com.eder.crud.dto.Response;
-import com.eder.crud.model.Pessoa;
-import com.eder.crud.service.PessoaService;
+import com.eder.crud.model.PessoaFisica;
+import com.eder.crud.service.PessoaFisicaService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,36 +18,36 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/pessoa")
-public class PessoaController {
+public class PessoaFisicaController {
 
     @Autowired
-    private PessoaService service;
+    private PessoaFisicaService service;
 
     @Autowired
     private ModelMapper modelMapper;
 
     @GetMapping
-    public ResponseEntity<List<Pessoa>> getPessoas() {
-        List<Pessoa> listpessoa = service.findAll();
-        return new ResponseEntity<>(listpessoa, HttpStatus.OK);
+    public ResponseEntity<List<PessoaFisica>> getPessoas() {
+        List<PessoaFisica> listPessoa = service.findAll();
+        return new ResponseEntity<>(listPessoa, HttpStatus.OK);
     }
 
     @GetMapping("/cpf/{cpf}")
-    public ResponseEntity<Pessoa> findPatientById(@PathVariable("cpf") String cpf) {
-        Optional<Pessoa> patient = service.findbyCpf(cpf);
-        return patient.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<PessoaFisica> findPessoaByCpf(@PathVariable("cpf") String cpf) {
+        Optional<PessoaFisica> pessoa = service.findbyCpf(cpf);
+        return pessoa.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/nome/{nome}")
-    public ResponseEntity<Pessoa> findPessoaById(@PathVariable("nome") String nome){
-        Optional<Pessoa> pessoa = service.findPessoaByNome(nome);
+    public ResponseEntity<PessoaFisica> findPessoaByNome(@PathVariable("nome") String nome){
+        Optional<PessoaFisica> pessoa = service.findByNome(nome);
         return  pessoa.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Response<PessoaDTO>> create(@Valid @RequestBody PessoaDTO dto, BindingResult result) {
+    public ResponseEntity<Response<PessoaFisicaDTO>> create(@Valid @RequestBody PessoaFisicaDTO dto, BindingResult result) {
 
-        Response<PessoaDTO> response = new Response<>();
+        Response<PessoaFisicaDTO> response = new Response<>();
 
         if(result.hasErrors()) {
             result.getAllErrors().forEach(e -> response.getErrors().add(e.getDefaultMessage()));
@@ -55,8 +55,8 @@ public class PessoaController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        Pessoa pessoa = service.save(this.convertToEntity(dto));
-        response.setData(this.convertToDto(pessoa));
+        PessoaFisica pessoaFisica = service.save(this.convertToEntity(dto));
+        response.setData(this.convertToDto(pessoaFisica));
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
@@ -69,9 +69,9 @@ public class PessoaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Response<PessoaDTO>> updatePessoa(@PathVariable("id") Long id, @RequestBody @Valid PessoaDTO dto,
-                                           BindingResult result) {
-        Response<PessoaDTO> response = new Response<>();
+    public ResponseEntity<Response<PessoaFisicaDTO>> updatePessoa(@PathVariable("id") Long id, @RequestBody @Valid PessoaFisicaDTO dto,
+                                                                  BindingResult result) {
+        Response<PessoaFisicaDTO> response = new Response<>();
 
         if (result.hasErrors() || (dto == null)) {
             result.getAllErrors().forEach(r -> response.getErrors().add(r.getDefaultMessage()));
@@ -79,17 +79,17 @@ public class PessoaController {
             return ResponseEntity.badRequest().body(response);
         }
 
-        Pessoa pessoaFind = this.convertToEntity(dto);
+        PessoaFisica pessoaFisicaFind = this.convertToEntity(dto);
 
-        service.findByIdOrFail(pessoaFind.getId());
-        service.save(pessoaFind);
-        response.setData(convertToDto(pessoaFind));
+        service.findByIdOrFail(pessoaFisicaFind.getId());
+        service.save(pessoaFisicaFind);
+        response.setData(convertToDto(pessoaFisicaFind));
 
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Pessoa> deleteById(@PathVariable Long id) {
+    public ResponseEntity<PessoaFisica> deleteById(@PathVariable Long id) {
         try {
             service.deleteById(id);
             return ResponseEntity.noContent().build();
@@ -98,11 +98,11 @@ public class PessoaController {
         }
     }
 
-    private Pessoa convertToEntity(PessoaDTO dto) {
-        return modelMapper.map(dto, Pessoa.class);
+    private PessoaFisica convertToEntity(PessoaFisicaDTO dto) {
+        return modelMapper.map(dto, PessoaFisica.class);
     }
 
-    private PessoaDTO convertToDto(Pessoa p) {
-        return modelMapper.map(p, PessoaDTO.class);
+    private PessoaFisicaDTO convertToDto(PessoaFisica p) {
+        return modelMapper.map(p, PessoaFisicaDTO.class);
     }
 }

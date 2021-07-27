@@ -1,23 +1,21 @@
 package com.eder.crud.dto;
 
 import com.eder.crud.model.EstadoCivil;
-import com.eder.crud.model.Pessoa;
+import com.eder.crud.model.PessoaFisica;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 
 @Getter
 @Setter
-public class PessoaDTO {
+public class PessoaFisicaDTO {
 
     @Id
     private Long id;
@@ -38,5 +36,5 @@ public class PessoaDTO {
     private EstadoCivil estadoCivil;
 
     @ManyToOne
-    private Pessoa parente;
+    private PessoaFisica parente;
 }

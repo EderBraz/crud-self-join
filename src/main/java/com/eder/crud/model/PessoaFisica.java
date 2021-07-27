@@ -1,5 +1,6 @@
 package com.eder.crud.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -7,7 +8,7 @@ import java.util.Date;
 
 @Data
 @Entity
-public class Pessoa {
+public class PessoaFisica {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,9 +18,12 @@ public class Pessoa {
     private String cpf;
 
     private Date dataNascimento;
+
+    @Enumerated(EnumType.STRING)
     private EstadoCivil estadoCivil;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "parente", referencedColumnName = "id")
-    private Pessoa parente;
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private PessoaFisica parente;
 }
