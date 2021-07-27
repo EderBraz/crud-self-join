@@ -8,7 +8,9 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -29,7 +31,7 @@ public class PessoaFisicaDTO {
 
     @NotNull(message = "Por favor, insira uma data de nascimento.")
     @JsonFormat(pattern = "dd/MM/yyyy")
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE, pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date dataNascimento;
 
     @NotNull(message = "Insira um estado civil.")

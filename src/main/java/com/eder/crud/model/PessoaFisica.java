@@ -1,7 +1,9 @@
 package com.eder.crud.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -17,6 +19,8 @@ public class PessoaFisica {
     private String nome;
     private String cpf;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date dataNascimento;
 
     @Enumerated(EnumType.STRING)
