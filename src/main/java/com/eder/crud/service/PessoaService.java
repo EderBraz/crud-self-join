@@ -21,9 +21,6 @@ public class PessoaService {
         return repository.findAll();
     }
 
-    public Optional<Pessoa> findById(Long id) {
-        return repository.findById(id);
-    }
     public Optional<Pessoa> findPessoaByNome(String nome) {
         return repository.findByNomeEquals(nome);
     }
@@ -36,8 +33,21 @@ public class PessoaService {
         return repository.save(pessoa);
     }
 
-    public void update(Pessoa pessoa) {
-        repository.save(pessoa);
+    public Optional<Pessoa> findById(Long id) {
+        return repository.findById(id);
+    }
+
+    public Pessoa findByIdOrFail(Long id) {
+        return repository.findById(id)
+                .orElseThrow(EntityNotFoundException::new);
+    }
+
+    public void pessoaSetParente(Long userId, Long parenteId) {
+        Pessoa pessoa = findByIdOrFail(userId);
+        Pessoa parente = findByIdOrFail(parenteId);
+
+        pessoa.setParente(parente);
+        this.save(pessoa);
     }
 
     @Transactional
